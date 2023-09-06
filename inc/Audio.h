@@ -6,33 +6,35 @@
 
 namespace Engine
 {
-    // Interface for Audio
-    class IAudio
+    // Base class for audio implementations
+    class Audio
     {
     public:
-        virtual ~IAudio() {} // Virtual destructor, ie. cannot instantiate interface
+        virtual ~Audio() {} // Virtual destructor, ie. cannot instantiate interface
+
+        // Member functions for an audio implementation
 
         virtual void Play() = 0;
-        // virtual void Pause() = 0;
-        // virtual void Resume() = 0;
-        // virtual void Stop() = 0;
-        // virtual bool GetPlaybackStatus() = 0;
+        virtual void Pause() = 0;
+        virtual void Resume() = 0;
+        virtual void Stop() = 0;
+        virtual bool IsPlaying() = 0;
 
         // virtual bool ToggleLoop() = 0;
         // virtual bool GetLoopStatus() = 0;
     };
 
-    class Audio : public IAudio
+    class SDL_Audio : public Audio
     {
     public:
-        Audio(std::string path);
-        ~Audio();
+        SDL_Audio(std::string path);
+        ~SDL_Audio();
 
         void Play() override;
-        // void Pause() override;
-        // void Resume() override;
-        // void Stop() override;
-        // bool GetPlaybackStatus() override;
+        void Pause() override;
+        void Resume() override;
+        void Stop() override;
+        bool IsPlaying() override;
 
         void SetupDevice();
 

@@ -34,7 +34,7 @@ int main(int argc, char *args[])
 
     std::cout << "SDL TTF Initialized!" << std::endl;
 
-    Engine::Audio audio = {"res/Audio/rain.wav"};
+    Engine::SDL_Audio audio = {"res/Audio/rain.wav"};
     audio.SetupDevice();
 
     /* Create Window */
@@ -75,6 +75,11 @@ int main(int argc, char *args[])
 
     while (running)
     {
+        if (!audio.IsPlaying())
+        {
+            audio.Play();
+        }
+
         while (SDL_PollEvent(&e) != 0)
         {
             if (e.type == SDL_EVENT_QUIT)
