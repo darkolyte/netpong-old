@@ -15,6 +15,8 @@ target_sources(
     PRIVATE
         NetPong.cpp
         Audio.cpp
+        StateManager.cpp
+        ExampleState.cpp
 )
 
 # Libraries to link to our executable

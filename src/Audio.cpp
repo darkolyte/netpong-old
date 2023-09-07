@@ -54,9 +54,9 @@ void Engine::SDL_Audio::Stop()
     SDL_ClearAudioStream(m_stream);
 }
 
-bool Engine::SDL_Audio::IsPlaying()
+bool Engine::SDL_Audio::IsPlaying() const
 {
-    if (SDL_GetAudioStreamAvailable(m_stream))
+    if (SDL_GetAudioStreamAvailable(m_stream) && !SDL_IsAudioDevicePaused(m_device))
     {
         return true;
     }

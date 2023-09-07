@@ -1,8 +1,8 @@
 #pragma once
 
-#include <SDL3/SDL.h>
-
 #include <string>
+
+#include <SDL3/SDL.h>
 
 namespace Engine
 {
@@ -18,7 +18,7 @@ namespace Engine
         virtual void Pause() = 0;
         virtual void Resume() = 0;
         virtual void Stop() = 0;
-        virtual bool IsPlaying() = 0;
+        virtual bool IsPlaying() const = 0;
 
         // virtual bool ToggleLoop() = 0;
         // virtual bool GetLoopStatus() = 0;
@@ -34,7 +34,7 @@ namespace Engine
         void Pause() override;
         void Resume() override;
         void Stop() override;
-        bool IsPlaying() override;
+        bool IsPlaying() const override;
 
         void SetupDevice();
 

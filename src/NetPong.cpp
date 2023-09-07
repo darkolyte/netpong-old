@@ -1,16 +1,15 @@
+#include <iostream>
+
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
-#include <iostream>
-
 #include "Audio.h"
-
-struct Vec2
-{
-    int x;
-    int y;
-};
+#include "Maths.h"
+#include "State.h"
+#include "StateManager.h"
+#include "Texture.h"
+#include "ExampleState.h"
 
 Vec2 PlayIntroSequence(SDL_Renderer *renderer, Vec2 p_start);
 
@@ -72,6 +71,12 @@ int main(int argc, char *args[])
     }
 
     audio.Play();
+
+    auto state_manager = Engine::StateManager::GetInstance();
+
+    std::shared_ptr<NetPong::ExampleState> test_state = std::make_shared<NetPong::ExampleState>();
+
+    state_manager.PushNewState(std::static_pointer_cast<Engine::State>(test_state));
 
     while (running)
     {
@@ -137,5 +142,5 @@ Vec2 PlayIntroSequence(SDL_Renderer *renderer, Vec2 p_start)
 
     SDL_DelayNS(75000);
 
-    return {x, y};
+    return {(float)x, (float)y};
 }
