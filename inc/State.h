@@ -11,8 +11,8 @@ namespace Engine
         virtual ~State() {} // Virtual destructor, ie. cannot instantiate interface
 
         virtual void Init() = 0;
-        virtual void Update() = 0;
-        virtual void Render() const = 0;
+        virtual void Update() = 0; // Handles any logic required for the state
+        virtual void Render() = 0; // Handles rendering of current frame
 
         virtual void Delete() = 0;
     };

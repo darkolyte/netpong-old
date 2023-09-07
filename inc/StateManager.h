@@ -18,7 +18,7 @@ namespace Engine
         void PushNewState(const std::shared_ptr<State> &state);
 
     private:
-        StateManager() {} // Private constructor, ie. cannot instantiate multiple instances of singleton
+        StateManager() {} // Private constructor, ie. prevent instantiating multiple instances of singleton
     private:
         std::vector<std::shared_ptr<State>> m_states;
     };

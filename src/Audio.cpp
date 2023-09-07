@@ -65,6 +65,8 @@ bool Engine::SDL_Audio::IsPlaying() const
 
 void Engine::SDL_Audio::SetupDevice()
 {
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Opening audio device");
+
     m_device = SDL_OpenAudioDevice(SDL_AUDIO_DEVICE_DEFAULT_OUTPUT, &m_audio_spec);
 
     m_stream = SDL_CreateAudioStream(&m_audio_spec, &m_audio_spec);

@@ -4,14 +4,11 @@
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
-#include "Audio.h"
 #include "Maths.h"
 #include "State.h"
 #include "StateManager.h"
 #include "Texture.h"
 #include "ExampleState.h"
-
-Vec2 PlayIntroSequence(SDL_Renderer *renderer, Vec2 p_start);
 
 int main(int argc, char *args[])
 {
@@ -23,7 +20,7 @@ int main(int argc, char *args[])
         return 1;
     }
 
-    std::cout << "SDL Video Subsystem Initialized!" << std::endl;
+    std::cout << "SDL Subsystems Initialized!" << std::endl;
 
     if (TTF_Init() == -1)
     {
@@ -32,9 +29,6 @@ int main(int argc, char *args[])
     }
 
     std::cout << "SDL TTF Initialized!" << std::endl;
-
-    Engine::SDL_Audio audio = {"res/Audio/rain.wav"};
-    audio.SetupDevice();
 
     /* Create Window */
 
@@ -60,30 +54,17 @@ int main(int argc, char *args[])
 
     SDL_Event e;
 
-    Vec2 starts[250];
-
-    int starts_size = sizeof(starts) / sizeof(starts[0]);
-
-    for (int i = 0; i < starts_size; i++)
-    {
-        starts[i].x = rand() % 900;
-        starts[i].y = rand() % 900;
-    }
-
-    audio.Play();
-
     auto state_manager = Engine::StateManager::GetInstance();
 
-    std::shared_ptr<NetPong::ExampleState> test_state = std::make_shared<NetPong::ExampleState>();
+    std::shared_ptr<NetPong::ExampleState> test_scene = std::make_shared<NetPong::ExampleState>(renderer);
 
-    state_manager.PushNewState(std::static_pointer_cast<Engine::State>(test_state));
+    state_manager.PushNewState(test_scene);
 
     while (running)
     {
-        if (!audio.IsPlaying())
-        {
-            audio.Play();
-        }
+
+        std::shared_ptr<Engine::State> current = state_manager.GetCurrentState();
+        current->Update();
 
         while (SDL_PollEvent(&e) != 0)
         {
@@ -97,50 +78,8 @@ int main(int argc, char *args[])
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
         SDL_RenderClear(renderer);
 
-        for (int i = 0; i < starts_size; i++)
-        {
-            starts[i] = PlayIntroSequence(renderer, starts[i]);
-        }
+        current->Render();
 
         SDL_RenderPresent(renderer);
     }
-}
-
-Vec2 PlayIntroSequence(SDL_Renderer *renderer, Vec2 p_start)
-{
-    int x = p_start.x - rand() % 5;
-    int y = p_start.y - rand() % 5;
-
-    if (x > 900 || y > 900)
-    {
-        x = rand() % 900;
-        y = rand() % 900;
-    }
-
-    int end = x + 5 + rand() % 60;
-
-    int fade_x = x - 150 + rand() % 100;
-    int fade_y = y - 150 + rand() % 100;
-
-    int r = rand() % 20;
-    int g = rand() % 20;
-    int b = 40 + rand() % 255;
-
-    SDL_SetRenderDrawColor(renderer, r / 2, g / 2, b / 2, 128);
-
-    for (; fade_x < x; fade_x++, fade_y++)
-    {
-        SDL_RenderPoint(renderer, fade_x, fade_y);
-    }
-
-    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-
-    for (; x < end; x++, y++)
-    {
-        SDL_RenderPoint(renderer, x, y);
-    }
-
-    SDL_DelayNS(75000);
-
-    return {(float)x, (float)y};
 }
