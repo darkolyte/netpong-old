@@ -14,6 +14,7 @@ target_sources(
     ${PROJECT_NAME}
     PRIVATE
         NetPong.cpp
+        Application.cpp
         Audio.cpp
         StateManager.cpp
         ExampleState.cpp
