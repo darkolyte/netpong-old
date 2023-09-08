@@ -21,8 +21,8 @@ namespace NetPong
         void Delete() override;
 
     private:
-        bool CursorOverJoinButton();
-        bool CursorOverExitButton();
+        bool CursorOverButton(Engine::Texture &button);
+        void UpdateButtonTexture(Engine::Texture &button, Vec2 pos, int font_size);
 
     private:
         SDL_Renderer *m_renderer;
@@ -31,5 +31,8 @@ namespace NetPong
         Engine::Texture m_title_text;
         Engine::Texture m_join_button;
         Engine::Texture m_exit_button;
+
+        bool m_was_over_join;
+        bool m_was_over_exit;
     };
 }
