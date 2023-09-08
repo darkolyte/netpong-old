@@ -28,8 +28,8 @@ bool Engine::Texture::LoadImage(SDL_Renderer *&renderer, std::string path)
         return false;
     }
 
-    m_width = image_surface->w;
-    m_height = image_surface->h;
+    m_size.w = image_surface->w;
+    m_size.h = image_surface->h;
 
     SDL_DestroySurface(image_surface);
 
@@ -42,12 +42,12 @@ bool Engine::Texture::SetFont(std::string path, int font_size)
 
     m_font = TTF_OpenFont(path.c_str(), font_size);
 
-    if (m_font)
+    if (!m_font)
     {
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to load font at %s with error %s", path.c_str(), TTF_GetError());
-        return true;
+        return false;
     }
-    return false;
+    return true;
 }
 
 void Engine::Texture::ChangeFontSize(int size)
@@ -58,16 +58,19 @@ void Engine::Texture::ChangeFontSize(int size)
     }
 }
 
-bool Engine::Texture::LoadText(SDL_Renderer *&renderer, std::string text, SDL_Color text_colour)
+bool Engine::Texture::LoadText(SDL_Renderer *&renderer, std::string text, SDL_Color text_colour, int font_size)
 {
     DestroyTexture();
 
     if (!m_font)
     {
-        SetFont("res/Font/Roboto-Regular.ttf", 48);
+        SetFont("res/Font/Roboto-Regular.ttf", font_size);
     }
 
-    SDL_Surface *text_surface = TTF_RenderUTF8_Blended(m_font, text.c_str(), text_colour);
+    m_text = text;
+    m_text_colour = text_colour;
+
+    SDL_Surface *text_surface = TTF_RenderUTF8_Blended(m_font, m_text.c_str(), m_text_colour);
 
     if (!text_surface)
     {
@@ -83,17 +86,60 @@ bool Engine::Texture::LoadText(SDL_Renderer *&renderer, std::string text, SDL_Co
         return false;
     }
 
-    m_width = text_surface->w;
-    m_height = text_surface->h;
+    m_size.w = text_surface->w;
+    m_size.h = text_surface->h;
 
     SDL_DestroySurface(text_surface);
 
     return true;
 }
 
-void Engine::Texture::Render(float x, float y, SDL_Renderer *&renderer, SDL_FRect *clip_rect, double angle, SDL_FPoint *center, SDL_RendererFlip flip)
+bool Engine::Texture::ReloadTexture(SDL_Renderer *&renderer)
 {
-    SDL_FRect render_rect = {x, y, m_width, m_height};
+    if (!m_texture)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "No texture loaded yet!");
+        return false;
+    }
+    DestroyTexture();
+
+    SDL_Surface *text_surface = TTF_RenderUTF8_Blended(m_font, m_text.c_str(), m_text_colour);
+
+    if (!text_surface)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to render text surface with error %s", TTF_GetError());
+        return false;
+    }
+
+    m_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+
+    if (!m_texture)
+    {
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create texture with error %s", IMG_GetError());
+        return false;
+    }
+
+    m_size.w = text_surface->w;
+    m_size.h = text_surface->h;
+
+    SDL_DestroySurface(text_surface);
+
+    return true;
+}
+
+void Engine::Texture::SetPosition(int x, int y)
+{
+    m_pos.x = x;
+    m_pos.y = y;
+}
+
+void Engine::Texture::Render(SDL_Renderer *&renderer, float x, float y, SDL_FRect *clip_rect, double angle, SDL_FPoint *center, SDL_RendererFlip flip)
+{
+
+    m_pos.x = x ? x : m_pos.x;
+    m_pos.y = y ? x : m_pos.y;
+
+    SDL_FRect render_rect = {m_pos.x, m_pos.y, m_size.w, m_size.h};
 
     if (clip_rect)
     {
@@ -117,8 +163,8 @@ void Engine::Texture::DestroyTexture()
         SDL_DestroyTexture(m_texture);
         m_texture = nullptr;
 
-        m_width = 0;
-        m_height = 0;
+        m_size.w = 0;
+        m_size.h = 0;
     }
 }
 

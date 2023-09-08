@@ -5,17 +5,19 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
+#include "Maths.h"
+
 namespace Engine
 {
     class Texture
     {
     public:
-        Texture() : m_texture(nullptr), m_font(nullptr), m_width(0), m_height(0) {}
+        Texture() : m_texture(nullptr), m_font(nullptr), m_size({0, 0}), m_pos({0, 0}) {}
         ~Texture() { Texture::FreeAllResources(); }
 
         bool LoadImage(SDL_Renderer *&renderer, std::string path);
 
-        bool LoadText(SDL_Renderer *&renderer, std::string text, SDL_Color text_colour);
+        bool LoadText(SDL_Renderer *&renderer, std::string text, SDL_Color text_colour, int font_size = 48);
 
         // void SetColor(Uint8 red, Uint8 green, Uint16 blue);
 
@@ -25,12 +27,16 @@ namespace Engine
 
         void ChangeFontSize(int size);
 
+        void SetPosition(int x, int y);
+
+        bool ReloadTexture(SDL_Renderer *&renderer);
+
         // void SetBlendMode(SDL_BlendMode mode);
 
-        void Render(float x, float y, SDL_Renderer *&renderer, SDL_FRect *clip_rect = nullptr, double angle = 0.0, SDL_FPoint *center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
+        void Render(SDL_Renderer *&renderer, float x = NULL, float y = NULL, SDL_FRect *clip_rect = nullptr, double angle = 0.0, SDL_FPoint *center = nullptr, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
-        int GetWidth() { return m_width; }
-        int GetHeight() { return m_height; }
+        Dim2 GetSize() { return m_size; }
+        Vec2 GetPos() { return m_pos; }
 
     private:
         void FreeAllResources();
@@ -39,9 +45,13 @@ namespace Engine
 
     private:
         SDL_Texture *m_texture;
-        TTF_Font *m_font;
 
-        float m_width;
-        float m_height;
+        TTF_Font *m_font;
+        SDL_Color m_text_colour;
+        std::string m_text;
+
+        Dim2 m_size;
+
+        Vec2 m_pos;
     };
 }

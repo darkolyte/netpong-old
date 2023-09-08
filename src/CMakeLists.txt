@@ -16,8 +16,9 @@ target_sources(
         NetPong.cpp
         Application.cpp
         Audio.cpp
+        Texture.cpp
         StateManager.cpp
-        ExampleState.cpp
+        MenuState.cpp
 )
 
 # Libraries to link to our executable

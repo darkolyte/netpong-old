@@ -4,7 +4,7 @@
 
 #include "State.h"
 #include "StateManager.h"
-#include "ExampleState.h"
+#include "MenuState.h"
 
 #include "Application.h"
 
@@ -33,7 +33,7 @@ void Engine::Application::Init()
     }
 
     // Define H and W elsewhere
-    m_window = SDL_CreateWindow("NetPong v.0.1.0", 900, 900, SDL_EVENT_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS);
+    m_window = SDL_CreateWindow("NetPong v.0.1.0", 900, 900, SDL_EVENT_WINDOW_SHOWN); // | SDL_WINDOW_BORDERLESS
 
     if (!m_window)
     {
@@ -54,7 +54,7 @@ void Engine::Application::Open()
 
     SDL_Event e;
 
-    std::shared_ptr<Engine::State> start_state = std::make_shared<NetPong::ExampleState>(m_renderer);
+    std::shared_ptr<Engine::State> start_state = std::make_shared<NetPong::MenuState>(m_renderer);
     m_state_stack.PushNewState(start_state);
 
     std::shared_ptr<Engine::State> current;

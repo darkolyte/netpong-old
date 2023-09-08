@@ -5,13 +5,14 @@
 #include "State.h"
 #include "Audio.h"
 #include "Maths.h"
+#include "Texture.h"
 
 namespace NetPong
 {
-    class ExampleState : public Engine::State
+    class MenuState : public Engine::State
     {
     public:
-        ExampleState(SDL_Renderer *&renderer);
+        MenuState(SDL_Renderer *&renderer);
 
         void Init() override;
         void Update() override;
@@ -20,13 +21,15 @@ namespace NetPong
         void Delete() override;
 
     private:
-        Vec2 GenerateFrame(Vec2 previous_frame);
+        bool CursorOverJoinButton();
+        bool CursorOverExitButton();
 
     private:
         SDL_Renderer *m_renderer;
 
         Engine::SDL_Audio m_bgm;
-        Vec2 m_particles[250];
-        int m_particle_count;
+        Engine::Texture m_title_text;
+        Engine::Texture m_join_button;
+        Engine::Texture m_exit_button;
     };
 }
