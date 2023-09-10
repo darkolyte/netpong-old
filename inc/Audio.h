@@ -37,6 +37,7 @@ namespace Engine
         bool IsPlaying() const override;
 
         void SetupDevice();
+        void Delete();
 
     private:
         SDL_AudioDeviceID m_device;

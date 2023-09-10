@@ -6,16 +6,28 @@
 #include "Texture.h"
 
 #include "MenuState.h"
+#include "JoinState.h"
 #include "ExampleState.h"
 
 NetPong::MenuState::MenuState(SDL_Renderer *&renderer, Engine::StateManager &state_stack)
     : m_renderer(renderer), m_state_stack(&state_stack), m_bgm(nullptr) {}
 
+NetPong::MenuState::~MenuState()
+{
+    if (m_bgm)
+    {
+        m_bgm->Delete();
+        m_bgm = nullptr;
+    }
+    m_renderer = nullptr;
+    m_state_stack = nullptr;
+}
+
 void NetPong::MenuState::Init()
 {
     if (m_bgm)
     {
-        m_bgm->~SDL_Audio();
+        m_bgm->Delete();
         m_bgm = nullptr;
     }
 
@@ -38,7 +50,7 @@ void NetPong::MenuState::Init()
 
 void NetPong::MenuState::Update()
 {
-    if (!m_bgm->IsPlaying())
+    if (m_bgm && !m_bgm->IsPlaying())
     {
         m_bgm->Play();
     }
@@ -57,7 +69,7 @@ void NetPong::MenuState::Update()
         {
             if (e.type == SDL_EVENT_MOUSE_BUTTON_UP)
             {
-                m_bgm->~SDL_Audio();
+                m_bgm->Delete();
                 m_bgm = nullptr;
 
                 std::shared_ptr<Engine::State> next_state = std::make_shared<NetPong::ExampleState>(m_renderer);
@@ -89,10 +101,10 @@ void NetPong::MenuState::Update()
         {
             if (e.type == SDL_EVENT_MOUSE_BUTTON_UP)
             {
-                m_bgm->~SDL_Audio();
+                m_bgm->Delete();
                 m_bgm = nullptr;
 
-                std::shared_ptr<Engine::State> next_state = std::make_shared<NetPong::ExampleState>(m_renderer);
+                std::shared_ptr<Engine::State> next_state = std::make_shared<NetPong::JoinState>(m_renderer, m_state_stack);
                 m_state_stack->PushNewState(next_state);
                 return;
             }
@@ -148,7 +160,7 @@ void NetPong::MenuState::Render()
 
 void NetPong::MenuState::Delete()
 {
-    return;
+    this->~MenuState();
 }
 
 bool NetPong::MenuState::CursorOverButton(Engine::Texture &button)

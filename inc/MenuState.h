@@ -14,6 +14,7 @@ namespace NetPong
     {
     public:
         MenuState(SDL_Renderer *&renderer, Engine::StateManager &state_stack);
+        ~MenuState();
 
         void Init() override;
         void Update() override;

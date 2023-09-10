@@ -18,6 +18,11 @@ Engine::SDL_Audio::~SDL_Audio()
     SDL_CloseAudioDevice(m_device);
 }
 
+void Engine::SDL_Audio::Delete()
+{
+    this->~SDL_Audio();
+}
+
 void Engine::SDL_Audio::Play()
 {
     if (m_audio_buffer && m_audio_duration)

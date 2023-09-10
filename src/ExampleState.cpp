@@ -95,7 +95,7 @@ Vec2 NetPong::ExampleState::GenerateFrame(Vec2 previous_frame)
         SDL_RenderPoint(m_renderer, x, y);
     }
 
-    SDL_DelayNS(250000);
+    SDL_DelayNS(175000);
 
     return {float(x), float(y)};
 }

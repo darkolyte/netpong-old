@@ -19,6 +19,7 @@ target_sources(
         Texture.cpp
         StateManager.cpp
         MenuState.cpp
+        JoinState.cpp
         ExampleState.cpp
 )
 

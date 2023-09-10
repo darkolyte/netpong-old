@@ -12,12 +12,21 @@ namespace Engine
     class Texture
     {
     public:
+        enum TTF_RenderMode
+        {
+            TTF_RENDER_BLENDED_WRAPPED = 0,
+            TTF_RENDER_BLENDED,
+            TTF_RENDER_SOLID_WRAPPED,
+            TTF_RENDER_SOLID
+        };
+
+    public:
         Texture() : m_texture(nullptr), m_font(nullptr), m_size({0, 0}), m_pos({0, 0}) {}
         ~Texture() { Texture::FreeAllResources(); }
 
         bool LoadImage(SDL_Renderer *&renderer, std::string path);
 
-        bool LoadText(SDL_Renderer *&renderer, std::string text, SDL_Color text_colour, int font_size = 48);
+        bool LoadText(SDL_Renderer *&renderer, std::string text, SDL_Color text_colour, int font_size = 48, TTF_RenderMode render_mode = TTF_RENDER_BLENDED);
 
         void SetColor(Uint8 red, Uint8 green, Uint16 blue);
 
@@ -29,7 +38,7 @@ namespace Engine
 
         void SetPosition(int x, int y);
 
-        bool ReloadTexture(SDL_Renderer *&renderer);
+        bool ReloadTexture(SDL_Renderer *&renderer, TTF_RenderMode render_mode = TTF_RENDER_BLENDED);
 
         // void SetBlendMode(SDL_BlendMode mode);
 

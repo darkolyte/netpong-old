@@ -61,9 +61,9 @@ void Engine::Application::Open()
 
     while (m_running)
     {
-        current = m_state_stack.GetCurrentState();
-
         current->Update();
+
+        current = m_state_stack.GetCurrentState();
 
         if (!current)
         {

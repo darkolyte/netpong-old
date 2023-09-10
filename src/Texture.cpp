@@ -58,7 +58,7 @@ void Engine::Texture::ChangeFontSize(int size)
     }
 }
 
-bool Engine::Texture::LoadText(SDL_Renderer *&renderer, std::string text, SDL_Color text_colour, int font_size)
+bool Engine::Texture::LoadText(SDL_Renderer *&renderer, std::string text, SDL_Color text_colour, int font_size, TTF_RenderMode render_mode)
 {
     DestroyTexture();
 
@@ -70,7 +70,26 @@ bool Engine::Texture::LoadText(SDL_Renderer *&renderer, std::string text, SDL_Co
     m_text = text;
     m_text_colour = text_colour;
 
-    SDL_Surface *text_surface = TTF_RenderUTF8_Blended(m_font, m_text.c_str(), m_text_colour);
+    SDL_Surface *text_surface;
+
+    switch (render_mode)
+    {
+    case TTF_RENDER_BLENDED_WRAPPED:
+        text_surface = TTF_RenderUTF8_Blended_Wrapped(m_font, m_text.c_str(), m_text_colour, 900);
+        break;
+    case TTF_RENDER_BLENDED:
+        text_surface = TTF_RenderUTF8_Blended(m_font, m_text.c_str(), m_text_colour);
+        break;
+    case TTF_RENDER_SOLID_WRAPPED:
+        text_surface = TTF_RenderUTF8_Solid_Wrapped(m_font, m_text.c_str(), m_text_colour, 900);
+        break;
+    case TTF_RENDER_SOLID:
+        text_surface = TTF_RenderUTF8_Solid(m_font, m_text.c_str(), m_text_colour);
+        break;
+    default:
+        SDL_LogError(SDL_LOG_CATEGORY_ERROR, "No matching render mode for text! ");
+        return false;
+    }
 
     if (!text_surface)
     {
@@ -85,7 +104,6 @@ bool Engine::Texture::LoadText(SDL_Renderer *&renderer, std::string text, SDL_Co
         SDL_LogError(SDL_LOG_CATEGORY_ERROR, "Failed to create texture with error %s", IMG_GetError());
         return false;
     }
-
     m_size.w = text_surface->w;
     m_size.h = text_surface->h;
 
@@ -94,7 +112,7 @@ bool Engine::Texture::LoadText(SDL_Renderer *&renderer, std::string text, SDL_Co
     return true;
 }
 
-bool Engine::Texture::ReloadTexture(SDL_Renderer *&renderer)
+bool Engine::Texture::ReloadTexture(SDL_Renderer *&renderer, TTF_RenderMode render_mode)
 {
     if (!m_texture)
     {
@@ -103,7 +121,28 @@ bool Engine::Texture::ReloadTexture(SDL_Renderer *&renderer)
     }
     DestroyTexture();
 
-    SDL_Surface *text_surface = TTF_RenderUTF8_Blended(m_font, m_text.c_str(), m_text_colour);
+    SDL_Surface *text_surface;
+
+    // switch (render_mode)
+    // {
+    // case TTF_RENDER_BLENDED_WRAPPED:
+    //     text_surface = TTF_RenderUTF8_Blended_Wrapped(m_font, m_text.c_str(), m_text_colour, 900);
+    //     break;
+    // case TTF_RENDER_BLENDED:
+    //     text_surface = TTF_RenderUTF8_Blended(m_font, m_text.c_str(), m_text_colour);
+    //     break;
+    // case TTF_RENDER_SOLID_WRAPPED:
+    //     text_surface = TTF_RenderUTF8_Solid_Wrapped(m_font, m_text.c_str(), m_text_colour, 900);
+    //     break;
+    // case TTF_RENDER_SOLID:
+    //     text_surface = TTF_RenderUTF8_Solid(m_font, m_text.c_str(), m_text_colour);
+    //     break;
+    // default:
+    //     SDL_LogError(SDL_LOG_CATEGORY_ERROR, "No matching render mode for text! ");
+    //     return false;
+    // }
+
+    text_surface = TTF_RenderUTF8_Blended_Wrapped(m_font, m_text.c_str(), m_text_colour, 900);
 
     if (!text_surface)
     {
