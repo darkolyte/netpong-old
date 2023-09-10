@@ -176,3 +176,13 @@ void Engine::Texture::CloseFont()
         m_font = nullptr;
     }
 }
+
+void Engine::Texture::SetColor(Uint8 red, Uint8 green, Uint16 blue)
+{
+    SDL_SetTextureColorMod(m_texture, red, green, blue);
+}
+
+void Engine::Texture::SetAlpha(Uint8 alpha)
+{
+    SDL_SetTextureAlphaMod(m_texture, alpha);
+}

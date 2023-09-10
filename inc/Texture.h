@@ -19,9 +19,9 @@ namespace Engine
 
         bool LoadText(SDL_Renderer *&renderer, std::string text, SDL_Color text_colour, int font_size = 48);
 
-        // void SetColor(Uint8 red, Uint8 green, Uint16 blue);
+        void SetColor(Uint8 red, Uint8 green, Uint16 blue);
 
-        // void SetAlpha(Uint8 alpha);
+        void SetAlpha(Uint8 alpha);
 
         bool SetFont(std::string path, int font_size);
 
