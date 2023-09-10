@@ -20,7 +20,6 @@ target_sources(
         StateManager.cpp
         MenuState.cpp
         JoinState.cpp
-        ExampleState.cpp
 )
 
 # Libraries to link to our executable

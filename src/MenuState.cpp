@@ -7,7 +7,6 @@
 
 #include "MenuState.h"
 #include "JoinState.h"
-#include "ExampleState.h"
 
 NetPong::MenuState::MenuState(SDL_Renderer *&renderer, Engine::StateManager &state_stack)
     : m_renderer(renderer), m_state_stack(&state_stack), m_bgm(nullptr) {}
@@ -72,8 +71,8 @@ void NetPong::MenuState::Update()
                 m_bgm->Delete();
                 m_bgm = nullptr;
 
-                std::shared_ptr<Engine::State> next_state = std::make_shared<NetPong::ExampleState>(m_renderer);
-                m_state_stack->PushNewState(next_state);
+                // std::shared_ptr<Engine::State> next_state = std::make_shared<NetPong::ExampleState>(m_renderer);
+                // m_state_stack->PushNewState(next_state);
                 return;
             }
         }
