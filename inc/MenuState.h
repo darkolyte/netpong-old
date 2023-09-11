@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL.h>
 
+#include "Application.h"
 #include "State.h"
 #include "StateManager.h"
 #include "Audio.h"
@@ -13,7 +14,7 @@ namespace NetPong
     class MenuState : public Engine::State
     {
     public:
-        MenuState(SDL_Renderer *&renderer, Engine::StateManager &state_stack);
+        MenuState(SDL_Renderer *&renderer, Engine::StateManager &state_stack, Engine::Application *app_ref);
         ~MenuState();
 
         void Init() override;
@@ -27,6 +28,8 @@ namespace NetPong
         void UpdateButtonTexture(Engine::Texture &button, Vec2 pos, int font_size, Uint8 alpha = 255);
 
     private:
+        Engine::Application *m_app_ref;
+
         SDL_Renderer *m_renderer;
         Engine::StateManager *m_state_stack;
 

@@ -7,7 +7,6 @@
 #include "State.h"
 #include "StateManager.h"
 
-#include "Maths.h"
 #include "Texture.h"
 
 namespace NetPong

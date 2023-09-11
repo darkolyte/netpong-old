@@ -5,8 +5,7 @@ add_executable(${PROJECT_NAME})
 target_include_directories(
     ${PROJECT_NAME}
     PRIVATE
-        {CMAKE_SOURCE_DIR}/inc/
-        {CMAKE_SOURCE_DIR}/inc/Enet
+        {CMAKE_CURRENT_SOURCE_DIR}/inc/
 )
 
 # Source files for our executable
@@ -18,6 +17,7 @@ target_sources(
         Audio.cpp
         Texture.cpp
         StateManager.cpp
+        GameState.cpp
         MenuState.cpp
         JoinState.cpp
 )

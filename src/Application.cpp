@@ -54,7 +54,7 @@ void Engine::Application::Open()
 
     SDL_Event e;
 
-    std::shared_ptr<Engine::State> start_state = std::make_shared<NetPong::MenuState>(m_renderer, m_state_stack);
+    std::shared_ptr<Engine::State> start_state = std::make_shared<NetPong::MenuState>(m_renderer, m_state_stack, this);
     m_state_stack.PushNewState(start_state);
 
     std::shared_ptr<Engine::State> current = m_state_stack.GetCurrentState();

@@ -1,4 +1,5 @@
 #include "JoinState.h"
+#include "GameState.h"
 
 NetPong::JoinState::JoinState(SDL_Renderer *&renderer, Engine::StateManager &state_stack)
     : m_renderer(renderer), m_state_stack(&state_stack) {}
@@ -58,7 +59,7 @@ void NetPong::JoinState::Update()
             }
             else if (e.key.keysym.sym == SDLK_v && SDL_GetModState() & SDL_KMOD_CTRL)
             {
-                if ((m_input + SDL_GetClipboardText()).length() > 254)
+                if ((m_input + SDL_GetClipboardText()).length() < 254)
                     m_input += SDL_GetClipboardText();
                 m_render_required = true;
             }
@@ -80,8 +81,9 @@ void NetPong::JoinState::Update()
         }
         else if (e.type == SDL_EVENT_KEY_UP && e.key.keysym.sym == SDLK_RETURN)
         {
-            // std::shared_ptr<Engine::State> next_state = std::make_shared<NetPong::ExampleState>(m_renderer);
-            // m_state_stack->PushNewState(next_state);
+            std::shared_ptr<Engine::State> next_state = std::make_shared<NetPong::GameState>(m_renderer, m_state_stack);
+            SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "%s", m_input.c_str());
+            m_state_stack->PushNewState(next_state);
             return;
         }
     }

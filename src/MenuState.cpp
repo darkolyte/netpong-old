@@ -1,25 +1,21 @@
 #include <SDL3/SDL.h>
 
-#include "State.h"
-#include "Audio.h"
-#include "Maths.h"
-#include "Texture.h"
-
 #include "MenuState.h"
 #include "JoinState.h"
 
-NetPong::MenuState::MenuState(SDL_Renderer *&renderer, Engine::StateManager &state_stack)
-    : m_renderer(renderer), m_state_stack(&state_stack), m_bgm(nullptr) {}
+NetPong::MenuState::MenuState(SDL_Renderer *&renderer, Engine::StateManager &state_stack, Engine::Application *app_ref)
+    : m_app_ref(app_ref), m_renderer(renderer), m_state_stack(&state_stack), m_bgm(nullptr) {}
 
 NetPong::MenuState::~MenuState()
 {
+    m_app_ref = nullptr;
+    m_renderer = nullptr;
+    m_state_stack = nullptr;
     if (m_bgm)
     {
         m_bgm->Delete();
         m_bgm = nullptr;
     }
-    m_renderer = nullptr;
-    m_state_stack = nullptr;
 }
 
 void NetPong::MenuState::Init()
@@ -68,8 +64,9 @@ void NetPong::MenuState::Update()
         {
             if (e.type == SDL_EVENT_MOUSE_BUTTON_UP)
             {
-                m_bgm->Delete();
-                m_bgm = nullptr;
+                SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Hosting...");
+                // m_bgm->Delete();
+                // m_bgm = nullptr;
 
                 // std::shared_ptr<Engine::State> next_state = std::make_shared<NetPong::ExampleState>(m_renderer);
                 // m_state_stack->PushNewState(next_state);

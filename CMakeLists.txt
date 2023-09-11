@@ -8,7 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Set Project Name and Version
 set(PROJECT_NAME NetPong)
-set(PROJECT_VERSION 0.1.0)
+set(PROJECT_VERSION 0.2.0)
 
 # Setting flags for debug and release builds
 set(CMAKE_CXX_FLAGS "-Wall -Wextra")
